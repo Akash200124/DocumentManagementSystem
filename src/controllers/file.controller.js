@@ -2,13 +2,15 @@ import { Files } from "../models/file.model.js";
 
 import { User } from "../models/user.model.js";
 import fs from 'fs'
+
+import { uploadOnCloudinary } from "../utils/cloudnary.js";
 const uploadFile = async (req, res) => {
 
     const file = req.file;
     const { title, description } = req.body;
     const jwt = req.headers.refreshtoken;
 
-    console.log(file);
+    console.log("file", file);
 
     if (!file || !title || !description) {
         fs.unlinkSync(file.path);
@@ -21,7 +23,7 @@ const uploadFile = async (req, res) => {
     try {
         const user = await User.findOne({ refreshToken: jwt });
 
-        console.log("user :", user);
+        // console.log("user :", user);
         if (!user) {
             fs.unlinkSync(file.path);
 
@@ -30,6 +32,20 @@ const uploadFile = async (req, res) => {
                 "message": "unauthorized"
             })
         }
+
+        // for upload on cloudnary images and videos 
+        // const result = await uploadOnCloudinary(file.path);
+
+        // if (!result) {
+        //     fs.unlinkSync(file.path);
+        //     return res.status(500).json({
+        //         "success": false,
+        //         "message": "Something went wrong while uploading file"
+        //     })
+        // }
+
+        // console.log("Result",result);
+
         const newFile = await Files.create({
             name: file.originalname,
             path: file.path,
