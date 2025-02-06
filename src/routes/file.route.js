@@ -18,9 +18,9 @@ router.route("/upload").post(
    uploadFile 
 );
 
-router.route("/deletefile:documentid").delete(deleteFile);
+router.route("/deletefile/:documentid").delete(deleteFile);
 router.route("/getfiles").get(getFile);
-router.route("/downloadfile:documentid").get(downloadFile);
+router.route("/downloadfile/:documentid").get(downloadFile);
 
 
 
